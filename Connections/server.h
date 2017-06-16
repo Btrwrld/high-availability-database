@@ -10,10 +10,11 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <sys/time.h> //FD_SET, FD_ISSET, FD_ZERO macros
+#include "../Parsers/XMLManager.h"
 
 #define TRUE   1
 #define FALSE  0
-#define PORT 8080
+#define PORT 8888
 
 class server {
 
@@ -32,6 +33,7 @@ public:
         return stat;
     }
     long Send(const char*  msg);
+    long Send2(const char*  msg);
 
 };
 

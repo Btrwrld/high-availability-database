@@ -3,6 +3,7 @@
 #include <rapidjson/document.h>
 #include <rapidjson/stringbuffer.h>
 #include "rapidjson/writer.h"
+#include "../Parsers/XMLManager.h"
 #include <rapidjson/document.h>
 #include <string.h>
 #include <iostream>
@@ -14,33 +15,47 @@ int max_sd;
 int num=2000;
 struct sockaddr_in address;
 
+using namespace std;
 using namespace rapidjson;
 
 void server::validate(const char * json){
     Document d;
     d.Parse(json);
     Value& type=d["type"];
+    
+    
+    if(strcmp(type.GetString(),"SELECT")==0){
+        XMLManager a;
+	    cout << json;
+	    a.generateTableMetadata(json);
+    }
+    
+    else if(strcmp(type.GetString(),"JOIN")==0){
+        cout << "Join" ;
+    
+    }
+    else if(strcmp(type.GetString(),"CREATE INDEX")==0){
+        cout << "Create index" ;
+    
+    }
+    else if(strcmp(type.GetString(),"DROP TABLE")==0){
+	    cout << "Drop table" ;
+    }
+    else if(strcmp(type.GetString(),"INSERT")==0){
+	    cout << "Insert" ;
+    
+    }
+    else if(strcmp(type.GetString(),"DELETE")==0){
+    
+    
+    }
+    else if(strcmp(type.GetString(),"UPDATE")==0){
+    
+    
+    }
+    else{
 
-
-    if(strcmp(type.GetString(),"sht")==0){
-        std::cout<< 1;
-    }else if(strcmp(type.GetString(),"izq")==0){
-        //Mov. izquierda
-        std::cout<< 9;
-    }else if(strcmp(type.GetString(),"der")==0){
-        //Mov. derecha
-        std::cout<< 4;
-    }else if(strcmp(type.GetString(),"arr")==0){
-        //Mov. arriba
-        std::cout<< 5;
-    }else if(strcmp(type.GetString(),"aba")==0){
-        //Mov. abajo
-        std::cout<< 3;
-    }else if(strcmp(type.GetString(),"aba")==0){
-        //Mov. abajo
-        std::cout<< 2;
-    }else{
-        std::cout<< 0;
+        cout << "Could not determine the requested petition" << endl;
     }
 
 }
@@ -76,7 +91,7 @@ void server::init() {
 
     //type of socket created
     address.sin_family = AF_INET;
-    address.sin_addr.s_addr = inet_addr("192.168.0.123");//Write your IP
+    address.sin_addr.s_addr = inet_addr("192.168.100.13");//Write your IP
     address.sin_port = htons( PORT );
 
     //bind the socket to localhost port 8080
@@ -204,8 +219,8 @@ void server::init() {
                     std::string s(m.substr(0,valread-1));
                     const char * json= s.c_str();
                     std::cout<<valread;
-                    //validate(json);
-                    //std::cout<<json;
+                    validate(json);
+                    std::cout<<json;
 
                     Send((s+n).c_str());
 
@@ -221,6 +236,12 @@ void server::init() {
 
 long server:: Send(const char * msg){
     for(int i=0;i<max_clients;i++) {
-        send(client_socket[i], msg, strlen(msg), 0);
+        send(client_socket[0], msg, strlen(msg), 0);
+    }
+}
+
+long server::Send2(const char *msg) {
+    for(int i=0;i<max_clients;i++) {
+        send(client_socket[1], msg, strlen(msg), 0);
     }
 }
