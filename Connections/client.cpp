@@ -15,20 +15,20 @@ void client::start() {
     char sbuff[MAX_SIZE],rbuff[MAX_SIZE];
 
     if((sock_desc = socket(AF_INET, SOCK_STREAM, 0)) < 0)
-        printf("Failed creating socket\n");
+        printf("ERROR\n");
 
     bzero((char *) &serv_addr, sizeof (serv_addr));
 
     serv_addr.sin_family = AF_INET;
-    serv_addr.sin_addr.s_addr = inet_addr("192.168.0.123");
-    serv_addr.sin_port = htons(8080);
+    serv_addr.sin_addr.s_addr = inet_addr("192.168.100.13");
+    serv_addr.sin_port = htons(8888);
 
     if (connect(sock_desc, (struct sockaddr *) &serv_addr, sizeof (serv_addr)) < 0) {
-        printf("Failed to connect to server\n");
+        printf("Error conectandose al servidor\n");
         return;
     }
 
-    printf("Connected successfully - Please enter string\n");
+    printf("Cliente Conectado\n");
     while(true)
     {
         //send(sock_desc,sbuff,strlen(sbuff),0);
